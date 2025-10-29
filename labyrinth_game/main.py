@@ -9,8 +9,6 @@ from labyrinth_game.player_actions import show_inventory, get_input
 
 from labyrinth_game.utils import describe_current_room
 
-
-
 game_state = {
     'player_inventory': [],  # Инвентарь игрока
     'current_room': 'entrance',  # Текущая комната
@@ -18,15 +16,17 @@ game_state = {
     'steps_taken': 0  # Количество шагов
 }
 
+
 def main():
     # Use a breakpoint in the code line below to debug your script.
     print("Добро пожаловать в Лабиринт сокровищ!")
-    current_room=game_state['current_room']
-    user_input=""
+    current_room = game_state['current_room']
+    user_input = ""
     while user_input.lower() != QUIT_GAME:
         describe_current_room(game_state)
         show_inventory(game_state)
-        user_input=get_input(game_state)
+        user_input = get_input(game_state)
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
