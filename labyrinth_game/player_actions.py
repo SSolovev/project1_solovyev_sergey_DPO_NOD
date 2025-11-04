@@ -1,18 +1,21 @@
 from typing import Dict
 
-from .constants import ROOMS, GameState, Items, Room, QUIT_GAME, ROOM_TREASURE
+from .constants import QUIT_GAME, ROOM_TREASURE, ROOMS, GameState, Items, Room
 
 
 def move_player(game_state, direction) -> None:
     from labyrinth_game.utils import describe_current_room
+
     from .utils import random_event
     room_name = game_state[GameState.CURRENT_ROOM]
     exits = ROOMS[room_name][Room.EXITS]
     if direction in exits:
         next_room = exits[direction]
         is_go = True
-        if direction == ROOM_TREASURE and Items.RUSTY_KEY in game_state[GameState.INVENTORY]:
-            print("Вы используете найденный ключ, чтобы открыть путь в комнату сокровищ.")
+        if (direction == ROOM_TREASURE and Items.RUSTY_KEY
+                in game_state[GameState.INVENTORY]):
+            print("Вы используете найденный ключ, "
+                  "чтобы открыть путь в комнату сокровищ.")
         elif direction == ROOM_TREASURE:
             print("Дверь заперта. Нужен ключ, чтобы пройти дальше.")
             is_go = False

@@ -1,9 +1,8 @@
 import math
 from math import sin
 
-from .constants import (ROOMS,
-                        TREASURE_CHEST, Items, Room, GameState, TRAP_ROOM)
-from .player_actions import get_input, add_item, use_item
+from .constants import ROOMS, TRAP_ROOM, TREASURE_CHEST, GameState, Items, Room
+from .player_actions import add_item, get_input, use_item
 
 
 def describe_current_room(game_state):
@@ -27,7 +26,8 @@ def solve_puzzle(game_state):
         user_answer = get_input("Ваш ответ: ")
         puzzle_answers = puzzle[1]
 
-        while not game_state[GameState.GAME_OVER] and user_answer.strip().casefold() not in puzzle_answers:
+        while (not game_state[GameState.GAME_OVER]
+               and user_answer.strip().casefold() not in puzzle_answers):
             if TRAP_ROOM == game_state[GameState.CURRENT_ROOM]:
                 trigger_trap(game_state)
             print("Неверно. Попробуйте снова.")
@@ -63,7 +63,8 @@ def attempt_open_treasure(game_state):
         else:
             print("Вы отступаете от сундука.")
     if solved:
-        print(f"В сундуке сокровище! Вы победили! Число шагов: {game_state[GameState.STEPS_TAKEN]}")
+        print(f"В сундуке сокровище! Вы победили! Число шагов: "
+              f"{game_state[GameState.STEPS_TAKEN]}")
         game_state[GameState.GAME_OVER] = True
 
 
@@ -118,9 +119,11 @@ def random_event(game_state: dict):
         case 1:
             print("В тенях что-то шуршит... вы замерли на месте.")
             if Items.SWORD in game_state[GameState.INVENTORY]:
-                print("Вы выхватываете меч, и шорох тут же прекращается. Существо отступило.")
+                print("Вы выхватываете меч, и шорох тут же прекращается."
+                      " Существо отступило.")
 
         case 2:
-            if game_state[GameState.CURRENT_ROOM] == TRAP_ROOM and Items.TORCH not in game_state[GameState.INVENTORY]:
+            if (game_state[GameState.CURRENT_ROOM] == TRAP_ROOM and
+                    Items.TORCH not in game_state[GameState.INVENTORY]):
                 print("Вы наступили на шаткую плиту в темноте!")
                 trigger_trap(game_state)

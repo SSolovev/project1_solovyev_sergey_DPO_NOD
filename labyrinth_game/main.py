@@ -1,13 +1,24 @@
 #!/usr/bin/env python3
-from labyrinth_game.constants import GameState, ROOM_TREASURE, COMMANDS
-from labyrinth_game.player_actions import show_inventory, get_input, move_player, take_item, use_item
+from labyrinth_game.constants import COMMANDS, ROOM_TREASURE, GameState
+from labyrinth_game.player_actions import (
+    get_input,
+    move_player,
+    show_inventory,
+    take_item,
+    use_item,
+)
+from labyrinth_game.utils import (
+    attempt_open_treasure,
+    describe_current_room,
+    show_help,
+    solve_puzzle,
+)
+
 # This is a sample Python script.
 
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows,
 # actions, and settings.
-
-from labyrinth_game.utils import describe_current_room, attempt_open_treasure, solve_puzzle, show_help
 
 game_state = {
     'player_inventory': [],  # Инвентарь игрока
@@ -32,7 +43,8 @@ def process_command(game_state, command):
             else:
                 use_item(game_state, command_list[1])
         case 'solve':
-            if game_state[GameState.CURRENT_ROOM].strip().casefold() == ROOM_TREASURE.strip().casefold():
+            if (game_state[GameState.CURRENT_ROOM].strip().casefold() ==
+                    ROOM_TREASURE.strip().casefold()):
                 attempt_open_treasure(game_state)
             else:
                 solve_puzzle(game_state)
