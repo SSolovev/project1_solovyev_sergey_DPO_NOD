@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from labyrinth_game.constants import QUIT_GAME, GAME_CURRENT_ROOM, ROOM_TREASURE
+from labyrinth_game.constants import GameState, ROOM_TREASURE
 from labyrinth_game.player_actions import show_inventory, get_input, move_player, take_item, use_item
 # This is a sample Python script.
 
@@ -7,7 +7,7 @@ from labyrinth_game.player_actions import show_inventory, get_input, move_player
 # Press Double ⇧ to search everywhere for classes, files, tool windows,
 # actions, and settings.
 
-from labyrinth_game.utils import describe_current_room, attempt_open_treasure, solve_puzzle
+from labyrinth_game.utils import describe_current_room, attempt_open_treasure, solve_puzzle, show_help
 
 game_state = {
     'player_inventory': [],  # Инвентарь игрока
@@ -18,26 +18,41 @@ game_state = {
 
 
 def process_command(game_state, command):
-    command_list = command.split()
-
+    command_list = command.strip().lower().split()
+    if not command_list:
+        print('Отсутствует аргумент')
+        return
     match command_list[0]:
         case 'look':
             describe_current_room(game_state)
         case 'use':
-            use_item(game_state, command_list[1])
+            if len(command_list) < 2 or not command_list[1]:
+                print('Нет предмета')
+            else:
+                use_item(game_state, command_list[1])
         case 'solve':
-            if game_state[GAME_CURRENT_ROOM] == ROOM_TREASURE:
+            if game_state[GameState.CURRENT_ROOM].strip().casefold() == ROOM_TREASURE.strip().casefold():
                 attempt_open_treasure(game_state)
             else:
                 solve_puzzle(game_state)
         case 'go':
-            move_player(game_state, command_list[1])
+            if len(command_list) < 2 or not command_list[1]:
+                print('Некуда идти')
+            else:
+                move_player(game_state, command_list[1])
         case 'inventory':
             show_inventory(game_state)
         case 'take':
-            take_item(game_state, command_list[1])
+            if len(command_list) < 2 or not command_list[1]:
+                print('Нет предмета')
+            else:
+                take_item(game_state, command_list[1])
         case 'quit' | 'exit':
-            game_state['game_over'] = True
+            game_state[GameState.GAME_OVER] = True
+        case 'help':
+            show_help()
+        case _:
+            print('Команда не найдена!')
 
 
 def main():
@@ -46,7 +61,7 @@ def main():
     current_room = game_state['current_room']
     user_input = ""
     describe_current_room(game_state)
-    while game_state['game_over']:
+    while not game_state[GameState.GAME_OVER]:
         user_input = get_input()
         process_command(game_state, user_input)
 

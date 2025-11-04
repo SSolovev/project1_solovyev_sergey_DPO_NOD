@@ -1,10 +1,10 @@
 # labyrinth_game/constants.py
-from labyrinth_game.constants import ROOM_ITEMS
 
 ROOMS = {
     'entrance': {
-        'description': 'Вы в темном входе лабиринта. Стены покрыты мхом. На полу лежит старый факел.',
-        'exits': {'north': 'hall', 'east': 'trap_room'},
+        'description': 'Вы в темном входе лабиринта. Стены покрыты мхом. '
+                       'На полу лежит старый факел.',
+        'exits': {'north': 'hall', 'east': 'trap_room', 'south': 'kitchen'},
         'items': ['torch'],
         'puzzle': None
     },
@@ -50,37 +50,46 @@ ROOMS = {
     'cellar': {
         'description': 'Сырой и мрачный погреб. Посередине комнаты на крюке висят части того что когда-то было человеком',
         'exits': {'east': 'kitchen'},
-        'items': ['treasure_key'],
+        'items': [],
         'puzzle': (
             'При попытке осмотреть останки, холодные веки поднимаются и на вас смотрят, не моргая, два мутных глаза... "Без окон без дверей. Полна горница людей?" - вопрошает тело',
-            'огурец')
+            'огурец'),
+        'reward': 'treasure_key'
     }
     # ... добавьте сюда остальные комнаты
 }
 
 QUIT_GAME = 'quit'
 
+
 # game_state ключи
-GAME_INVENTORY = 'player_inventory'  # Инвентарь игрока
-GAME_CURRENT_ROOM = 'current_room'  # Текущая комната
-GAME_GAME_OVER = 'game_over'  # Значения окончания игры
-GAME_STEPS_TAKEN = 'steps_taken'  # Количество шагов
+class GameState:
+    INVENTORY = 'player_inventory'  # Инвентарь игрока
+    CURRENT_ROOM = 'current_room'  # Текущая комната
+    GAME_OVER = 'game_over'  # Значения окончания игры
+    STEPS_TAKEN = 'steps_taken'  # Количество шагов
+
 
 # константы для названий комнаты
-ROOM_TREASURE='treasure_room'
+ROOM_TREASURE = 'treasure_room'
+
 
 # константы для ITEMS комнаты
-ROOM_DESCR='description'
-ROOM_EXITS= 'exits'
-ROOM_ITEMS='items'
-ROOM_PUZZLE='puzzle'
+class Room:
+    DESCR = 'description'
+    EXITS = 'exits'
+    ITEMS = 'items'
+    PUZZLE = 'puzzle'
+    REWARD = 'reward'
+
 
 # константы для ITEMS игрока
-ITEM_TORCH = 'torch'
-ITEM_SWORD = 'sword'
-ITEM_BRONZE_BOX = 'bronze_box'
-ITEM_RUSTY_KEY = 'rusty_key'
+class Items:
+    TORCH = 'torch'  # Предмет Факел
+    SWORD = 'sword'
+    BRONZE_BOX = 'bronze_box'
+    RUSTY_KEY = 'rusty_key'
+    TREASURE_KEY = 'treasure_key'
 
 
-TREASURE_KEY = 'treasure_key'
 TREASURE_CHEST = 'treasure_chest'
