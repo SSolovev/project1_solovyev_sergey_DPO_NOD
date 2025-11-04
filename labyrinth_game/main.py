@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from labyrinth_game.constants import GameState, ROOM_TREASURE
+from labyrinth_game.constants import GameState, ROOM_TREASURE, COMMANDS
 from labyrinth_game.player_actions import show_inventory, get_input, move_player, take_item, use_item
 # This is a sample Python script.
 
@@ -23,6 +23,7 @@ def process_command(game_state, command):
         print('Отсутствует аргумент')
         return
     match command_list[0]:
+
         case 'look':
             describe_current_room(game_state)
         case 'use':
@@ -35,6 +36,8 @@ def process_command(game_state, command):
                 attempt_open_treasure(game_state)
             else:
                 solve_puzzle(game_state)
+        case 'north' | 'south' | 'east' | 'west':
+            move_player(game_state, command_list[0])
         case 'go':
             if len(command_list) < 2 or not command_list[1]:
                 print('Некуда идти')
@@ -50,7 +53,7 @@ def process_command(game_state, command):
         case 'quit' | 'exit':
             game_state[GameState.GAME_OVER] = True
         case 'help':
-            show_help()
+            show_help(COMMANDS)
         case _:
             print('Команда не найдена!')
 
@@ -58,8 +61,6 @@ def process_command(game_state, command):
 def main():
     # Use a breakpoint in the code line below to debug your script.
     print("Добро пожаловать в Лабиринт сокровищ!")
-    current_room = game_state['current_room']
-    user_input = ""
     describe_current_room(game_state)
     while not game_state[GameState.GAME_OVER]:
         user_input = get_input()

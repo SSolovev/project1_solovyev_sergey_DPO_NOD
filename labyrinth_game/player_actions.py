@@ -1,17 +1,27 @@
 from typing import Dict
 
-from .constants import ROOMS, GameState, Items, Room, QUIT_GAME
+from .constants import ROOMS, GameState, Items, Room, QUIT_GAME, ROOM_TREASURE
 
 
 def move_player(game_state, direction) -> None:
     from labyrinth_game.utils import describe_current_room
+    from .utils import random_event
     room_name = game_state[GameState.CURRENT_ROOM]
     exits = ROOMS[room_name][Room.EXITS]
     if direction in exits:
         next_room = exits[direction]
-        game_state[GameState.CURRENT_ROOM] = next_room
-        game_state[GameState.STEPS_TAKEN] += 1
-        describe_current_room(game_state)
+        is_go = True
+        if direction == ROOM_TREASURE and Items.RUSTY_KEY in game_state[GameState.INVENTORY]:
+            print("Вы используете найденный ключ, чтобы открыть путь в комнату сокровищ.")
+        elif direction == ROOM_TREASURE:
+            print("Дверь заперта. Нужен ключ, чтобы пройти дальше.")
+            is_go = False
+
+        if is_go:
+            game_state[GameState.CURRENT_ROOM] = next_room
+            game_state[GameState.STEPS_TAKEN] += 1
+            describe_current_room(game_state)
+            random_event(game_state)
     else:
         print("Нельзя пойти в этом направлении.")
 
@@ -77,6 +87,7 @@ def use_item(game_state: Dict[str, any], item_name: str) -> None:
     else:
         print(f"У вас нет такого предмета: '{item_name}'")
 
+
 def get_input(prompt: str = "> ") -> str:
     """
     Получить данные от пользователя
@@ -90,6 +101,7 @@ def get_input(prompt: str = "> ") -> str:
     except(KeyboardInterrupt, EOFError):
         print("\nВыход из игры.")
         return QUIT_GAME
+
 
 def add_item(game_state, item_name):
     inventory_items = game_state['player_inventory']
