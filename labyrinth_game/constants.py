@@ -74,40 +74,33 @@ ROOMS = {
 }
 
 QUIT_GAME = 'quit'
-
+EXIT_GAME = 'exit'
 
 # game_state ключи
-class GameState:
-    INVENTORY = 'player_inventory'  # Инвентарь игрока
-    CURRENT_ROOM = 'current_room'  # Текущая комната
-    GAME_OVER = 'game_over'  # Значения окончания игры
-    STEPS_TAKEN = 'steps_taken'  # Количество шагов
-
+INVENTORY = 'player_inventory'  # Инвентарь игрока
+CURRENT_ROOM = 'current_room'  # Текущая комната
+GAME_OVER = 'game_over'  # Значения окончания игры
+STEPS_TAKEN = 'steps_taken'  # Количество шагов
 
 # константы для названий комнаты
 ROOM_TREASURE = 'treasure_room'
-TRAP_ROOM = 'trap_room'
-
+ROOM_TRAP = 'trap_room'
+ROOM_START = "entrance"
 
 # константы для ITEMS комнаты
-class Room:
-    DESCR = 'description'
-    EXITS = 'exits'
-    ITEMS = 'items'
-    PUZZLE = 'puzzle'
-    REWARD = 'reward'
-
+DESCR = 'description'
+EXITS = 'exits'
+ITEMS = 'items'
+PUZZLE = 'puzzle'
+REWARD = 'reward'
 
 # константы для ITEMS игрока
-class Items:
-    TORCH = 'torch'  # Предмет Факел
-    SWORD = 'sword'
-    BRONZE_BOX = 'bronze_box'
-    RUSTY_KEY = 'rusty_key'
-    TREASURE_KEY = 'treasure_key'
-    COIN = 'coin'
-
-
+TORCH = 'torch'  # Предмет Факел
+SWORD = 'sword'
+BRONZE_BOX = 'bronze_box'
+RUSTY_KEY = 'rusty_key'
+TREASURE_KEY = 'treasure_key'
+COIN = 'coin'
 TREASURE_CHEST = 'treasure_chest'
 
 COMMANDS = {
@@ -120,3 +113,37 @@ COMMANDS = {
     "quit": "выйти из игры",
     "help": "показать это сообщение"
 }
+
+# Константы случайных событий
+EVENT_CHANCE_MODULO = 10  # Делитель для шанса возникновения события
+EVENT_TRIGGER_VALUE = 0  # Значение, при котором событие происходит
+RANDOM_EVENT_SEED = 0  # Фиксированное семя для выбора события
+RANDOM_EVENT_COUNT = 3  # Количество возможных событий
+
+# Константы для ловушки
+TRAP_DAMAGE_SEED = 0  # Семя для расчёта урона ловушки
+TRAP_DAMAGE_MODULO = 9  # Диапазон урона [0, 8]
+TRAP_DEATH_THRESHOLD = 3  # Порог мгновенной гибели (0..2 — смерть)
+MIN_INVENTORY_FOR_LOSS = 1  # Минимум предметов для потери в ловушке
+
+# Идентификаторы событий
+EVENT_ID_COIN = 0
+EVENT_ID_RUSTLE = 1
+EVENT_ID_TRAP = 2
+
+# Команды
+CMD_LOOK = "look"
+CMD_USE = "use"
+CMD_SOLVE = "solve"
+CMD_GO = "go"
+CMD_INVENTORY = "inventory"
+CMD_TAKE = "take"
+CMD_QUIT = "quit"
+CMD_EXIT = "exit"
+CMD_HELP = "help"
+
+# Направления
+DIR_NORTH = "north"
+DIR_SOUTH = "south"
+DIR_EAST = "east"
+DIR_WEST = "west"

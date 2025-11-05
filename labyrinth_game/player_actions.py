@@ -1,19 +1,31 @@
 from typing import Dict
 
-from .constants import QUIT_GAME, ROOM_TREASURE, ROOMS, GameState, Items, Room
+from . import constants as const
+from .constants import QUIT_GAME, ROOM_TREASURE, ROOMS
 
 
 def move_player(game_state, direction) -> None:
+    """
+        Перемещает игрока в другую комнату в указанном направлении.
+
+        Проверяет, существует ли выход в заданном направлении. Если да,
+        обновляет текущую комнату игрока и увеличивает счетчик шагов.
+        Также обрабатывает особые условия, такие как запертые двери.
+
+        Args:
+            game_state (dict): Словарь, содержащий текущее состояние игры.
+            direction (str): Направление для перемещения ('north', 'south', и т.д.).
+        """
     from labyrinth_game.utils import describe_current_room
 
     from .utils import random_event
-    room_name = game_state[GameState.CURRENT_ROOM]
-    exits = ROOMS[room_name][Room.EXITS]
+    room_name = game_state[const.CURRENT_ROOM]
+    exits = ROOMS[room_name][const.EXITS]
     if direction in exits:
         next_room = exits[direction]
         is_go = True
-        if (direction == ROOM_TREASURE and Items.RUSTY_KEY
-                in game_state[GameState.INVENTORY]):
+        if (direction == ROOM_TREASURE and const.RUSTY_KEY
+                in game_state[const.INVENTORY]):
             print("Вы используете найденный ключ, "
                   "чтобы открыть путь в комнату сокровищ.")
         elif direction == ROOM_TREASURE:
@@ -21,23 +33,33 @@ def move_player(game_state, direction) -> None:
             is_go = False
 
         if is_go:
-            game_state[GameState.CURRENT_ROOM] = next_room
-            game_state[GameState.STEPS_TAKEN] += 1
+            game_state[const.CURRENT_ROOM] = next_room
+            game_state[const.STEPS_TAKEN] += 1
             describe_current_room(game_state)
             random_event(game_state)
     else:
         print("Нельзя пойти в этом направлении.")
 
 
+
 TAKE_ITEMS_EXCEPTIONS = {'treasure_chest': 'Вы не можете поднять сундук,'
                                            ' он слишком тяжелый.'}
 
-
 def take_item(game_state, item_name) -> None:
-    room_name = game_state[GameState.CURRENT_ROOM]
-    items_list = ROOMS[room_name][Room.ITEMS]
+    """
+    Позволяет игроку взять предмет, находящийся в текущей комнате.
+
+    Перемещает указанный предмет из списка предметов комнаты в инвентарь
+    игрока. Обрабатывает случаи, когда предмет нельзя взять.
+
+    Args:
+        game_state (dict): Словарь с состоянием игры.
+        item_name (str): Название предмета, который нужно взять.
+    """
+    room_name = game_state[const.CURRENT_ROOM]
+    items_list = ROOMS[room_name][const.ITEMS]
     if item_name in items_list and item_name not in TAKE_ITEMS_EXCEPTIONS:
-        game_state[GameState.INVENTORY].append(item_name)
+        game_state[const.INVENTORY].append(item_name)
         items_list.remove(item_name)
         print("Вы подняли:", item_name)
     elif item_name in TAKE_ITEMS_EXCEPTIONS:
@@ -52,7 +74,7 @@ def show_inventory(game_state: dict) -> None:
 
     :param game_state: Словарь с состоянием игры.
     """
-    inventory = game_state[GameState.INVENTORY]
+    inventory = game_state[const.INVENTORY]
     if not inventory:
         print("Инвентарь пуст!")
     else:
@@ -67,22 +89,22 @@ def use_item(game_state: Dict[str, any], item_name: str) -> None:
     :param item_name: Название предмета.
     """
 
-    inventory_items = game_state[GameState.INVENTORY]
+    inventory_items = game_state[const.INVENTORY]
 
     if item_name in inventory_items:
         match item_name:
-            case Items.TORCH:
+            case const.TORCH:
                 print("Стало светлее.")
                 inventory_items.remove(item_name)
-            case Items.SWORD:
+            case const.SWORD:
                 print("Вы стали увереннее.")
                 inventory_items.remove(item_name)
-            case Items.BRONZE_BOX:
+            case const.BRONZE_BOX:
                 print("Шкатулка открылась. Внутри вы обнаружили ржавый ключ.")
-                if Items.RUSTY_KEY not in inventory_items:
-                    inventory_items.append(Items.RUSTY_KEY)
+                if const.RUSTY_KEY not in inventory_items:
+                    inventory_items.append(const.RUSTY_KEY)
                     inventory_items.remove(item_name)
-            case Items.TREASURE_KEY:
+            case const.TREASURE_KEY:
                 print("Вы применяете ключ, и замок щёлкает. Сундук открыт!")
                 inventory_items.remove(item_name)
             case _:
@@ -107,6 +129,13 @@ def get_input(prompt: str = "> ") -> str:
 
 
 def add_item(game_state, item_name):
+    """
+    Добавляет предмет в инвентарь игрока, избегая дубликатов.
+
+    Args:
+        game_state (dict): Словарь с состоянием игры.
+        item_name (str): Название добавляемого предмета.
+    """
     inventory_items = game_state['player_inventory']
     if item_name not in inventory_items:
         inventory_items.append(item_name)

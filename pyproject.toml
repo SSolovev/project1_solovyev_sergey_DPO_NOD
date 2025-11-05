@@ -1,24 +1,18 @@
-[project]
+[tool.poetry]
 name = "project1-solovyev-sergey-dpo-nod"
 version = "0.1.0"
-description = "Домашнее задание 1"
-authors = [
-    {name = "Solovyev Sergey"}
-]
+description = "Текстовая adventure-игра «Лабиринт сокровищ» для закрепления основ Python и Git"
+authors = ["Solovyev Sergey"]
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = [
+packages = [
+    { include = "labyrinth_game" },
 ]
 
+[tool.poetry.dependencies]
+python = ">=3.11"
 
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
- packages = [
-     { include = "labyrinth_game" },
- ]
+[tool.poetry.group.dev.dependencies]
+ruff = ">=0.14.2,<0.15.0"
 
 [tool.poetry.scripts]
 project = "labyrinth_game.main:main"
@@ -31,7 +25,7 @@ exclude = ["venv", ".venv", "dist", "__pycache__"]
 [tool.ruff.lint]
 select = ["E", "F", "I"]
 ignore = []
-[dependency-groups]
-dev = [
-    "ruff (>=0.14.2,<0.15.0)"
-]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
